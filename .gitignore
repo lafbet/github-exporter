@@ -1,0 +1,7 @@
+.sequence
+*.pem
+.idea/
+.vscode/
+
+# Build artifact
+./main
