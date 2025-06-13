@@ -63,7 +63,7 @@ func AddMetrics() map[string]*prometheus.Desc {
 		[]string{}, nil,
 	)
 	APIMetrics["Deployments"] = prometheus.NewDesc(
-		prometheus.BuildFQName("github", "repo", "deployment_seconds"),
+		prometheus.BuildFQName("github", "repo", "deployment"),
 		"History of deployments for a given repository",
 		[]string{"repo", "id", "user", "environment", "ref", "task", "created_at"}, nil,
 	)
