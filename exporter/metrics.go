@@ -84,7 +84,7 @@ func (e *Exporter) processMetrics(data []*Datum, rates *RateLimits, ch chan<- pr
 		for _, deployment := range x.Deployments {
 			createdAt, err := time.Parse(time.RFC3339, deployment.CreatedAt)
 			if err == nil {
-				ch <- prometheus.MustNewConstMetricWithCreatedTimestamp(e.APIMetrics["Deployments"], prometheus.CounterValue, float64(createdAt.Unix()), createdAt.UTC(), x.Name, strconv.FormatInt(deployment.Id, 10), deployment.User.Login, deployment.Environment, deployment.Ref, deployment.Task, strconv.FormatInt(createdAt.UTC().Unix(), 10))
+				ch <- prometheus.MustNewConstMetric(e.APIMetrics["Deployments"], prometheus.GaugeValue, float64(createdAt.Unix()), x.Name, strconv.FormatInt(deployment.Id, 10), deployment.User.Login, deployment.Environment, deployment.Ref, deployment.Task, strconv.FormatInt(createdAt.UTC().Unix(), 10))
 			}
 		}
 
