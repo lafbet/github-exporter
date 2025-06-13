@@ -1,14 +1,22 @@
-version: "2"
+version: "3.6"
 
 services:
-  github-exporter:
+  github_exporter:
     tty: true
     stdin_open: true
     expose:
       - 9171
     ports:
       - 9171:9171
-    image: lafbet/github-exporter:latest
+    image: ghcr.io/lafbet/github-exporter:latest
     environment:
       - REPOS=<REPOS you want to monitor>
       - GITHUB_TOKEN=<your github api token>
+
+networks:
+  grafana_network:
+    external:
+      name: grafana_network
+  nginx-proxy:
+    external:
+      name: nginx-proxy
