@@ -63,9 +63,9 @@ func AddMetrics() map[string]*prometheus.Desc {
 		[]string{}, nil,
 	)
 	APIMetrics["Deployments"] = prometheus.NewDesc(
-		prometheus.BuildFQName("github", "repo", "deployments"),
+		prometheus.BuildFQName("github", "repo", "deployment_seconds"),
 		"History of deployments for a given repository",
-		[]string{"repo", "id", "user", "environment", "ref", "task"}, nil,
+		[]string{"repo", "id", "user", "environment", "ref", "task", "created_at"}, nil,
 	)
 
 	return APIMetrics
@@ -84,7 +84,7 @@ func (e *Exporter) processMetrics(data []*Datum, rates *RateLimits, ch chan<- pr
 		for _, deployment := range x.Deployments {
 			createdAt, err := time.Parse(time.RFC3339, deployment.CreatedAt)
 			if err == nil {
-				ch <- prometheus.MustNewConstMetric(e.APIMetrics["Deployments"], prometheus.GaugeValue, float64(createdAt.Unix()), x.Name, strconv.FormatInt(deployment.Id, 10), deployment.User.Login, deployment.Environment, deployment.Ref, deployment.Task)
+				ch <- prometheus.MustNewConstMetricWithCreatedTimestamp(e.APIMetrics["Deployments"], prometheus.CounterValue, float64(createdAt.Unix()), createdAt.UTC(), x.Name, strconv.FormatInt(deployment.Id, 10), deployment.User.Login, deployment.Environment, deployment.Ref, deployment.Task, strconv.FormatInt(createdAt.UTC().Unix(), 10))
 			}
 		}
 
